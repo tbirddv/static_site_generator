@@ -1,5 +1,5 @@
 import unittest
-from htmlnode import LeafNode
+from htmlnode import LeafNode, ImageNode
 
 class TestLeafNode(unittest.TestCase):
     def test_init_with_tag_and_value(self):
@@ -45,3 +45,35 @@ class TestLeafNode(unittest.TestCase):
     def test_no_value(self):
         with self.assertRaises(ValueError):
             LeafNode(tag="p", value="")
+
+class TestImageNode(unittest.TestCase):
+    def test_init(self):
+        node = ImageNode("img", {"src": "https://example.com/image.png", "alt": "Example Image"})
+        self.assertEqual(node.tag, "img")
+        self.assertEqual(node.props, {"src": "https://example.com/image.png", "alt": "Example Image"})
+        self.assertEqual(node.value, None)
+        self.assertEqual(node.children, [])
+
+    def test_to_html(self):
+        node = ImageNode("img", {"src": "https://example.com/image.png", "alt": "Example Image"})
+        self.assertEqual(node.to_html(), '<img src="https://example.com/image.png" alt="Example Image" />')
+
+    def test_to_html_with_no_alt(self):
+        node = ImageNode("img", {"src": "https://example.com/image.png"})
+        self.assertEqual(node.to_html(), '<img src="https://example.com/image.png" />')
+
+    def test_no_src(self):
+        with self.assertRaises(ValueError):
+            ImageNode("img", {"alt": "Example Image"})
+
+    def test_no_tag(self):
+        with self.assertRaises(ValueError):
+            ImageNode("", {"src": "https://example.com/image.png", "alt": "Example Image"})
+
+    def test_no_props(self):
+        with self.assertRaises(ValueError):
+            ImageNode("img", {})
+
+    def test_src_not_string(self):
+        with self.assertRaises(TypeError):
+            ImageNode("img", {"src": 123, "alt": "Example Image"})
