@@ -75,7 +75,7 @@ class ImageNode(HTMLNode):
         if not self.props.get("src"):
             raise ValueError("The 'src' property of ImageNode cannot be empty.")
         props_html = self.props_to_html()
-        return f"<{self.tag} src=\"{self.props['src']}\"{props_html} />"
+        return f"<{self.tag}{props_html} />"
     
     def to_html(self):
         if "src" not in self.props:

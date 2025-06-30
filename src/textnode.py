@@ -1,4 +1,5 @@
 from enum import Enum
+from htmlnode import LeafNode, ImageNode
 
 class TextType(Enum):
     PLAIN = "PLAIN"
@@ -30,3 +31,21 @@ class TextNode:
         if self.url:
             return f"TextNode({self.text}, {self.text_type.value}, {self.url})"
         return f"TextNode({self.text}, {self.text_type.value})"
+    
+    def to_html_node(self):
+        if self.text_type == TextType.PLAIN:
+            return LeafNode(tag=None, value=self.text)
+        elif self.text_type == TextType.BOLD:
+            return LeafNode(tag="b", value=self.text)
+        elif self.text_type == TextType.ITALIC:
+            return LeafNode(tag="i", value=self.text)
+        elif self.text_type == TextType.CODE:
+            return LeafNode(tag="code", value=self.text)
+        elif self.text_type == TextType.LINK:
+            return LeafNode(tag="a", value=self.text, props={"href": self.url})
+        elif self.text_type == TextType.IMAGE:
+            if not self.text:
+                return ImageNode(tag="img", props={"src": self.url})
+            return ImageNode(tag="img", props={"src": self.url, "alt": self.text})
+        else:
+            raise ValueError(f"Unsupported TextType: {self.text_type}")
