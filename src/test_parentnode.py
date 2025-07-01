@@ -56,7 +56,7 @@ class TestParentNode(unittest.TestCase):
     def test_repr(self):
         child_node = LeafNode(tag="span", value="Child Node")
         node = ParentNode(tag="div", children=[child_node], props={"class": "container"})
-        expected_repr = "HTMLNode(tag=div, children=[HTMLNode(tag=span, value=Child Node)], props={'class': 'container'})"
+        expected_repr = "ParentNode(tag=div, children=[HTMLNode(tag=span, value=Child Node)], props={'class': 'container'})"
         self.assertEqual(repr(node), expected_repr)
 
     def test_to_html_with_props(self):

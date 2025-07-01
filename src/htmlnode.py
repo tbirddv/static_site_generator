@@ -100,3 +100,16 @@ class ParentNode(HTMLNode):
         if not self.children:
             raise ValueError("ParentNode must have children to convert to HTML.")
         return f"<{self.tag}{self.props_to_html()}>" + "".join(child.to_html() for child in self.children) + f"</{self.tag}>"
+    
+    def __eq__(self, other):
+        if not isinstance(other, ParentNode):
+            return False
+        for self_child, other_child in zip(self.children, other.children):
+            if self_child != other_child:
+                return False
+        return (self.tag == other.tag and
+                self.props == other.props and
+                len(self.children) == len(other.children))
+    
+    def __repr__(self):
+        return f"ParentNode(tag={self.tag}, children={self.children}, props={self.props})"

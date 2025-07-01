@@ -140,6 +140,7 @@ class BlockNode:
         elif self.block_type == BlockType.HEADING:
             level = re.match(r"#{1,6}", self.content).group(0)
             self.content = self.content.lstrip("#")
+            self.content = self.content.lstrip(" ")
             return ParentNode(tag=f"h{len(level)}", children=[node.to_html_node() for node in self.block_text_to_text_nodes()])
         elif self.block_type == BlockType.CODE:
             self.content = self.content.lstrip("```\n")
@@ -157,5 +158,5 @@ class BlockNode:
         else:
             raise ValueError(f"Unsupported BlockType: {self.block_type}")
         
-        def to_section(self):
-            return ParentNode(tag=div, children=[self.to_parent_node()])
+    def to_section(self):
+        return ParentNode(tag="div", children=[self.to_parent_node()])
