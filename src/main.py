@@ -71,7 +71,7 @@ def generate_page(src, template, dst):
     blocks = markdown_to_blocks(markdown)
     title = get_title(blocks)
     body_html = "\n".join(block.to_section().to_html() for block in blocks)
-    output_html = template_html.replace("{{ Title }}", title).replace("{{ Content }}", body_html)
+    output_html = template_html.replace("{{ Title }}", title).replace("{{ Content }}", body_html).replace('href="/', f'href="/{os.path.basename(abs_src)}').replace('src="/', f'src="/{os.path.basename(abs_src)}')
     with open(abs_dst, 'w', encoding='utf-8') as f:
         f.write(output_html)
 
