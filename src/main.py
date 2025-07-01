@@ -71,19 +71,32 @@ def generate_page(src, template, dst):
     blocks = markdown_to_blocks(markdown)
     title = get_title(blocks)
     body_html = "\n".join(block.to_section().to_html() for block in blocks)
-    output_html = template_html.replace("{{ Title }}", title).replace("{{ Content }}", body_html).replace('href="/', f'href="/{os.path.basename(abs_src)}').replace('src="/', f'src="/{os.path.basename(abs_src)}')
+    if len(sys.argv) >= 2:
+        output_html = template_html.replace("{{ Title }}", title).replace("{{ Content }}", body_html).replace('href="/', f'href="{sys.argv[1]}').replace('src="/', f'src="{sys.argv[1]}')
     with open(abs_dst, 'w', encoding='utf-8') as f:
         f.write(output_html)
 
 
 def main():
-    if len(sys.argv) != 4:
-        print("Usage: python main.py <source_dir> <dest_dir> <template_file>")
-        sys.exit(1)
-    if not sys.argv[3].endswith(".html"):
-        print("Template file must be an HTML file.")
-        sys.exit(1)
-    clone_directory_and_generate(sys.argv[1], sys.argv[2], sys.argv[3])
+    if len(sys.argv) == 4:
+        src = sys.argv[1]
+        dst = sys.argv[2]
+        template = sys.argv[3]
+        clone_directory_and_generate(src, dst, template)
+        return
+    if len(sys.argv) == 1 or len(sys.argv) == 2 and sys.argv[1] == "--help":
+        print("For Testing or Local Hosting:")
+        print("Usage: python3 src/main.py <source_directory> <destination_directory> <template_file>")
+        print("Example: python3 src/main.py static public template.html")
+        print("For Production Build:")
+        print("if hosting on GitHub Pages, provide the repository name as the second argument to ensure correct asset linking.")
+        print("Usage: python3 src/main.py '/REPO_NAME/'")
+        return
+    if len(sys.argv) == 2:
+        src = "static"
+        template = "template.html"
+        dst = "docs"
+        clone_directory_and_generate(src, dst, template)
 
     
         

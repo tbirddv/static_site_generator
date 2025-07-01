@@ -1,1 +1,1 @@
-python3 src/main.py https://github.com/tbirddv/static_site_generator/tree/main/static https://github.com/tbirddv/static_site_generator/tree/main/docs template.html
+python3 src/main.py /static_site_generator/
