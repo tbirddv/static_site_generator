@@ -77,12 +77,6 @@ class ImageNode(HTMLNode):
         props_html = self.props_to_html()
         return f"<{self.tag}{props_html} />"
     
-    def to_html(self):
-        if "src" not in self.props:
-            raise ValueError("ImageNode must have a 'src' property to convert to HTML.")
-        props_html = self.props_to_html()
-        return f"<{self.tag}{props_html} />"
-    
 class ParentNode(HTMLNode):
     def __init__(self, tag, children, props=None):
         super().__init__(tag=tag, value=None, children=children, props=props)
@@ -101,15 +95,3 @@ class ParentNode(HTMLNode):
             raise ValueError("ParentNode must have children to convert to HTML.")
         return f"<{self.tag}{self.props_to_html()}>" + "".join(child.to_html() for child in self.children) + f"</{self.tag}>"
     
-    def __eq__(self, other):
-        if not isinstance(other, ParentNode):
-            return False
-        for self_child, other_child in zip(self.children, other.children):
-            if self_child != other_child:
-                return False
-        return (self.tag == other.tag and
-                self.props == other.props and
-                len(self.children) == len(other.children))
-    
-    def __repr__(self):
-        return f"ParentNode(tag={self.tag}, children={self.children}, props={self.props})"

@@ -73,6 +73,8 @@ def generate_page(src, template, dst):
     body_html = "\n".join(block.to_section().to_html() for block in blocks)
     if len(sys.argv) >= 2:
         output_html = template_html.replace("{{ Title }}", title).replace("{{ Content }}", body_html).replace('href="/', f'href="{sys.argv[1]}').replace('src="/', f'src="{sys.argv[1]}')
+    else:
+        output_html = template_html.replace("{{ Title }}", title).replace("{{ Content }}", body_html)
     with open(abs_dst, 'w', encoding='utf-8') as f:
         f.write(output_html)
 
